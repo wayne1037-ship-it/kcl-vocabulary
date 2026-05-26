@@ -1,0 +1,588 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#0f172a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="KCL Vocabulary" />
+  <title>KCL 留學生活單字</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #07111f;
+      --panel: rgba(15, 23, 42, 0.82);
+      --panel-2: rgba(30, 41, 59, 0.88);
+      --text: #e2e8f0;
+      --muted: #94a3b8;
+      --brand: #38bdf8;
+      --brand-2: #a78bfa;
+      --good: #34d399;
+      --warn: #fbbf24;
+      --bad: #fb7185;
+      --line: rgba(148, 163, 184, 0.18);
+      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
+        radial-gradient(circle at top right, rgba(167, 139, 250, 0.16), transparent 24%),
+        linear-gradient(180deg, #020617 0%, #08101d 48%, #020617 100%);
+      color: var(--text);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+    .app {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px 16px 32px;
+    }
+    .topbar {
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+    .hero {
+      padding: 20px;
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.86));
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: #bfdbfe;
+      background: rgba(56, 189, 248, 0.12);
+      border: 1px solid rgba(56, 189, 248, 0.22);
+      border-radius: 999px;
+      padding: 6px 10px;
+      font-size: 12px;
+      letter-spacing: .02em;
+      margin-bottom: 12px;
+    }
+    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; }
+    .subtitle { margin: 0; color: var(--muted); max-width: 60ch; }
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 16px;
+    }
+    .stat {
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.75);
+      border-radius: 18px;
+      padding: 12px;
+    }
+    .stat .n { font-size: 22px; font-weight: 800; }
+    .stat .l { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .panel {
+      border: 1px solid var(--line);
+      background: var(--panel);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(14px);
+    }
+    .toolbar {
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 1fr;
+      padding: 14px;
+    }
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+    }
+    input, select, button {
+      font: inherit;
+    }
+    input[type="search"], select {
+      width: 100%;
+      color: var(--text);
+      background: rgba(2, 6, 23, 0.72);
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      padding: 14px 14px;
+      outline: none;
+    }
+    input[type="search"]:focus, select:focus, button:focus-visible {
+      border-color: rgba(56, 189, 248, 0.75);
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+    }
+    .btn {
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.78);
+      color: var(--text);
+      padding: 12px 14px;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+    }
+    .btn:hover { transform: translateY(-1px); }
+    .btn.primary {
+      background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(167, 139, 250, 0.92));
+      color: #020617;
+      border-color: transparent;
+      font-weight: 700;
+    }
+    .chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .chip {
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.7);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .chip.active {
+      color: #e0f2fe;
+      background: rgba(56, 189, 248, 0.16);
+      border-color: rgba(56, 189, 248, 0.3);
+    }
+    .main {
+      margin-top: 14px;
+      display: grid;
+      gap: 14px;
+      grid-template-columns: 1fr;
+    }
+    .list {
+      display: grid;
+      gap: 12px;
+      padding: 14px;
+    }
+    .card {
+      border: 1px solid var(--line);
+      background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.8));
+      border-radius: 18px;
+      padding: 14px;
+    }
+    .card-top {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: flex-start;
+    }
+    .word { font-size: 22px; font-weight: 800; }
+    .phonetic { color: var(--muted); font-size: 14px; margin-top: 4px; }
+    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+    .tag {
+      font-size: 12px;
+      padding: 5px 8px;
+      border-radius: 999px;
+      background: rgba(148, 163, 184, 0.09);
+      color: #cbd5e1;
+      border: 1px solid rgba(148, 163, 184, 0.14);
+    }
+    .def {
+      margin-top: 12px;
+      display: grid;
+      gap: 10px;
+      color: var(--text);
+    }
+    .row {
+      display: grid;
+      gap: 4px;
+    }
+    .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
+    .examples {
+      color: #cbd5e1;
+      font-size: 14px;
+      line-height: 1.55;
+    }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+    .small { padding: 10px 12px; border-radius: 12px; }
+    .favorite { color: #fde68a; }
+    .empty {
+      padding: 24px;
+      color: var(--muted);
+      text-align: center;
+    }
+    .quiz {
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    .quizbox {
+      border: 1px solid var(--line);
+      border-radius: 18px;
+      padding: 14px;
+      background: rgba(2, 6, 23, 0.7);
+    }
+    .quizq { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
+    .quizchoices { display: grid; gap: 8px; }
+    .choice {
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid var(--line);
+      background: rgba(15, 23, 42, 0.75);
+      color: var(--text);
+      text-align: left;
+      cursor: pointer;
+    }
+    .choice.correct { border-color: rgba(52, 211, 153, 0.5); background: rgba(16, 185, 129, 0.15); }
+    .choice.wrong { border-color: rgba(251, 113, 133, 0.55); background: rgba(251, 113, 133, 0.12); }
+    .quizmeta { color: var(--muted); font-size: 14px; }
+    .footer { color: var(--muted); font-size: 13px; padding: 6px 2px 0; }
+    @media (min-width: 900px) {
+      .topbar { grid-template-columns: 1.2fr .8fr; }
+      .toolbar { grid-template-columns: 1.4fr .9fr; align-items: center; }
+      .main { grid-template-columns: 1.2fr .8fr; align-items: start; }
+      .quiz { position: sticky; top: 16px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <section class="topbar">
+      <div class="hero">
+        <div class="badge">KCL 留學生活單字 · 中英文雙語 · PWA</div>
+        <h1>留學常用單字，手機打開就能背</h1>
+        <p class="subtitle">適合你在英國生活、租屋、銀行、醫療、校園、交通、社交場景使用。可搜尋、分類、收藏、測驗，離線也能看。</p>
+        <div class="stats">
+          <div class="stat"><div class="n" id="totalCount">0</div><div class="l">總單字數</div></div>
+          <div class="stat"><div class="n" id="favCount">0</div><div class="l">已收藏</div></div>
+          <div class="stat"><div class="n" id="studyCount">0</div><div class="l">目前篩選</div></div>
+        </div>
+      </div>
+      <div class="hero">
+        <div class="badge">快速使用</div>
+        <div class="chips" id="quickChips"></div>
+        <div class="footer" style="margin-top:12px;">安裝到手機後會像 app 一樣出現在主畫面。請先透過本機或網頁伺服器開啟。</div>
+      </div>
+    </section>
+
+    <section class="panel toolbar">
+      <input id="search" type="search" placeholder="搜尋英文或中文，例如 rent, bank, 醫院" autocomplete="off" />
+      <div class="controls">
+        <select id="sortBy" aria-label="排序方式">
+          <option value="category">按分類</option>
+          <option value="alpha">英文 A-Z</option>
+          <option value="fav">只看收藏</option>
+        </select>
+        <button class="btn primary" id="randomBtn">隨機抽一個</button>
+        <button class="btn" id="clearBtn">清除搜尋</button>
+      </div>
+    </section>
+
+    <section class="main">
+      <div class="panel">
+        <div class="list">
+          <div class="chips" id="categoryChips"></div>
+          <div id="wordList"></div>
+        </div>
+      </div>
+      <div class="panel quiz">
+        <div class="badge">小測驗</div>
+        <div class="quizbox">
+          <p class="quizq" id="quizQuestion">準備中</p>
+          <div class="quizchoices" id="quizChoices"></div>
+          <div class="quizmeta" id="quizMeta"></div>
+        </div>
+        <div class="actions">
+          <button class="btn primary small" id="nextQuizBtn">下一題</button>
+          <button class="btn small" id="speakBtn">朗讀目前題目</button>
+        </div>
+        <div class="footer">提示：收藏常用字，之後可用收藏清單快速複習。</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const words = [
+      { en: 'rent', zh: '房租', category: 'housing', phonetic: '/rent/', definition: 'The money you pay to live in a flat or house.', example: 'My rent is due on the first day of every month.' },
+      { en: 'deposit', zh: '押金', category: 'housing', phonetic: '/dɪˈpɒzɪt/', definition: 'Money paid in advance as a guarantee.', example: 'The landlord asked for a deposit before I moved in.' },
+      { en: 'lease', zh: '租約', category: 'housing', phonetic: '/liːs/', definition: 'A formal agreement to rent a place for a period of time.', example: 'I signed a 12-month lease for my room.' },
+      { en: 'bill', zh: '帳單', category: 'housing', phonetic: '/bɪl/', definition: 'A request for payment for goods or services.', example: 'We split the electricity bill with the flatmates.' },
+      { en: 'postcode', zh: '郵遞區號', category: 'housing', phonetic: '/ˈpəʊstkəʊd/', definition: 'A code used for sorting mail and identifying addresses.', example: 'Please write your postcode on the form.' },
+      { en: 'commute', zh: '通勤', category: 'transport', phonetic: '/kəˈmjuːt/', definition: 'To travel regularly between home and school or work.', example: 'My commute to campus takes about 30 minutes.' },
+      { en: 'platform', zh: '月台', category: 'transport', phonetic: '/ˈplætfɔːm/', definition: 'The place where you board a train.', example: 'The train leaves from platform 4.' },
+      { en: 'fare', zh: '車資', category: 'transport', phonetic: '/feə(r)/', definition: 'The money paid to travel by bus, train, or taxi.', example: 'The bus fare is cheaper if you use a travel card.' },
+      { en: 'receipt', zh: '收據', category: 'shopping', phonetic: '/rɪˈsiːt/', definition: 'A written record proving that you paid for something.', example: 'Keep the receipt in case you want to return the item.' },
+      { en: 'refund', zh: '退款', category: 'shopping', phonetic: '/ˈriːfʌnd/', definition: 'Money returned to you after a return or cancellation.', example: 'I asked for a refund because the product was damaged.' },
+      { en: 'discount', zh: '折扣', category: 'shopping', phonetic: '/ˈdɪskaʊnt/', definition: 'A reduction in the usual price.', example: 'Students often get a discount at this store.' },
+      { en: 'queue', zh: '排隊', category: 'shopping', phonetic: '/kjuː/', definition: 'A line of people waiting for something.', example: 'There was a long queue outside the shop.' },
+      { en: 'GP', zh: '家庭醫生', category: 'health', phonetic: '/ˌdʒiː ˈpiː/', definition: 'A general practitioner; your first doctor contact in the UK.', example: 'You should register with a GP soon after arrival.' },
+      { en: 'appointment', zh: '預約', category: 'health', phonetic: '/əˈpɔɪntmənt/', definition: 'A planned meeting with a doctor, tutor, or official.', example: 'I booked a doctor appointment for next Tuesday.' },
+      { en: 'prescription', zh: '處方', category: 'health', phonetic: '/prɪˈskrɪpʃn/', definition: 'A note from a doctor allowing you to get medicine.', example: 'The pharmacy filled my prescription the same day.' },
+      { en: 'symptom', zh: '症狀', category: 'health', phonetic: '/ˈsɪmptəm/', definition: 'A sign that you are ill.', example: 'A fever can be a symptom of an infection.' },
+      { en: 'module', zh: '課程單元', category: 'university', phonetic: '/ˈmɒdjuːl/', definition: 'A part of a degree course.', example: 'This semester I am taking three modules.' },
+      { en: 'seminar', zh: '研討課', category: 'university', phonetic: '/ˈsemɪnɑː(r)/', definition: 'A small class discussion session.', example: 'Our seminar focuses on case studies.' },
+      { en: 'deadline', zh: '截止日期', category: 'university', phonetic: '/ˈdedlaɪn/', definition: 'The latest time by which something must be done.', example: 'The essay deadline is Friday at 5 pm.' },
+      { en: 'feedback', zh: '回饋', category: 'university', phonetic: '/ˈfiːdbæk/', definition: 'Comments to help you improve.', example: 'I asked my tutor for feedback on my draft.' },
+      { en: 'bank account', zh: '銀行帳戶', category: 'money', phonetic: '/bæŋk əˈkaʊnt/', definition: 'An account held at a bank.', example: 'I opened a bank account after arriving in London.' },
+      { en: 'cash withdrawal', zh: '提款', category: 'money', phonetic: '/kæʃ wɪðˈdrɔːəl/', definition: 'Taking money out of a bank account.', example: 'I made a cash withdrawal from the ATM.' },
+      { en: 'budget', zh: '預算', category: 'money', phonetic: '/ˈbʌdʒɪt/', definition: 'A plan for how much money you can spend.', example: 'I made a monthly budget for rent and food.' },
+      { en: 'transaction', zh: '交易', category: 'money', phonetic: '/trænˈzækʃn/', definition: 'A financial action, such as payment or transfer.', example: 'The transaction appeared on my banking app immediately.' },
+      { en: 'hostel', zh: '青年旅館', category: 'social', phonetic: '/ˈhɒstl/', definition: 'A budget place to stay with shared facilities.', example: 'I stayed in a hostel for the first week.' },
+      { en: 'flatmate', zh: '室友', category: 'social', phonetic: '/ˈflætmeɪt/', definition: 'A person you share a flat with.', example: 'My flatmate and I share the kitchen.' },
+      { en: 'invite', zh: '邀請', category: 'social', phonetic: '/ɪnˈvaɪt/', definition: 'To ask someone to come to an event.', example: 'She invited me to her birthday dinner.' },
+      { en: 'networking', zh: '人脈交流', category: 'social', phonetic: '/ˈnetwɜːkɪŋ/', definition: 'Meeting people to build professional contacts.', example: 'The event is good for networking with classmates.' },
+      { en: 'emergency', zh: '緊急狀況', category: 'essentials', phonetic: '/ɪˈmɜːdʒənsi/', definition: 'A serious situation that needs immediate action.', example: 'Call 999 in an emergency.' },
+      { en: 'insurance', zh: '保險', category: 'essentials', phonetic: '/ɪnˈʃʊərəns/', definition: 'Protection against financial loss.', example: 'You may need student insurance for your belongings.' },
+      { en: 'passport', zh: '護照', category: 'essentials', phonetic: '/ˈpɑːspɔːt/', definition: 'An official travel document.', example: 'Keep your passport in a safe place.' },
+      { en: 'visa', zh: '簽證', category: 'essentials', phonetic: '/ˈviːzə/', definition: 'Official permission to enter or stay in a country.', example: 'Check your visa expiry date before travelling.' },
+      { en: 'landlord', zh: '房東', category: 'housing', phonetic: '/ˈlændlɔːd/', definition: 'The person who owns and rents out the property.', example: 'The landlord arranged a repair for the heater.' },
+      { en: 'tenant', zh: '房客', category: 'housing', phonetic: '/ˈtenənt/', definition: 'A person who rents and lives in a property.', example: 'As a tenant, you should keep the flat clean.' },
+      { en: 'utility bill', zh: '水電瓦斯帳單', category: 'housing', phonetic: '/juːˈtɪləti bɪl/', definition: 'A bill for gas, electricity, water, or similar services.', example: 'We divided the utility bill between four flatmates.' },
+      { en: 'broadband', zh: '寬頻網路', category: 'housing', phonetic: '/ˈbrɔːdbænd/', definition: 'High-speed internet service.', example: 'The broadband in our flat is very slow.' },
+      { en: 'council tax', zh: '市政稅', category: 'housing', phonetic: '/ˈkaʊnsl tæks/', definition: 'A local tax paid to the city council in the UK.', example: 'Some students are exempt from council tax.' },
+      { en: 'laundry', zh: '洗衣', category: 'essentials', phonetic: '/ˈlɔːndri/', definition: 'The activity of washing clothes.', example: 'I do my laundry every Sunday.' },
+      { en: 'groceries', zh: '雜貨／日常食材', category: 'shopping', phonetic: '/ˈɡrəʊsəriz/', definition: 'Food and other items bought at a supermarket.', example: 'I spent too much money on groceries this week.' },
+      { en: 'stationery', zh: '文具', category: 'shopping', phonetic: '/ˈsteɪʃənəri/', definition: 'Writing materials such as pens and paper.', example: 'I bought stationery before the semester started.' },
+      { en: 'cash machine', zh: '提款機', category: 'money', phonetic: '/ˈkæʃ məˌʃiːn/', definition: 'An ATM; a machine for withdrawing cash.', example: 'There is a cash machine outside the station.' },
+      { en: 'debit card', zh: '簽帳卡', category: 'money', phonetic: '/ˈdebɪt kɑːd/', definition: 'A card used to pay directly from your bank account.', example: 'I paid with my debit card at the supermarket.' },
+      { en: 'direct debit', zh: '直接扣款', category: 'money', phonetic: '/dəˌrekt ˈdebɪt/', definition: 'An automatic payment taken from your bank account.', example: 'My phone bill is paid by direct debit.' },
+      { en: 'overdraft', zh: '透支', category: 'money', phonetic: '/ˈəʊvədrɑːft/', definition: 'Spending more money than you have in your account.', example: 'Avoid going into your overdraft if possible.' },
+      { en: 'tuition fee', zh: '學費', category: 'money', phonetic: '/tjuːˈɪʃn fiː/', definition: 'The cost of studying at a university.', example: 'International tuition fees can be high.' },
+      { en: 'scholarship', zh: '獎學金', category: 'money', phonetic: '/ˈskɒləʃɪp/', definition: 'Money given to support a student’s studies.', example: 'She received a scholarship for academic excellence.' },
+      { en: 'student loan', zh: '學生貸款', category: 'money', phonetic: '/ˈstjuːdənt ləʊn/', definition: 'Borrowed money used to pay for education.', example: 'Some students use a loan to cover living costs.' },
+      { en: 'lecture', zh: '講課／演講課', category: 'university', phonetic: '/ˈlektʃə(r)/', definition: 'A formal class taught to many students.', example: 'The lecture covered financial accounting basics.' },
+      { en: 'tutorial', zh: '小班討論課', category: 'university', phonetic: '/tjuːˈtɔːriəl/', definition: 'A small group teaching session.', example: 'We discussed the case study in the tutorial.' },
+      { en: 'essay', zh: '論文／短文', category: 'university', phonetic: '/ˈeseɪ/', definition: 'A structured piece of academic writing.', example: 'I need to finish my essay by next week.' },
+      { en: 'dissertation', zh: '論文', category: 'university', phonetic: '/ˌdɪsəˈteɪʃn/', definition: 'A long academic research paper.', example: 'The dissertation topic is related to auditing.' },
+      { en: 'citation', zh: '引用', category: 'university', phonetic: '/saɪˈteɪʃn/', definition: 'A reference to a source used in your work.', example: 'Make sure every source has a proper citation.' },
+      { en: 'plagiarism', zh: '抄襲', category: 'university', phonetic: '/ˈpleɪdʒərɪzəm/', definition: 'Using someone else’s work or words without credit.', example: 'Plagiarism can lead to serious academic penalties.' },
+      { en: 'deadline extension', zh: '延長截止日期', category: 'university', phonetic: '/ˈdedlaɪn ɪkˈstenʃn/', definition: 'Extra time granted to submit work later.', example: 'I requested a deadline extension because I was ill.' },
+      { en: 'office hours', zh: '導師答疑時間', category: 'university', phonetic: '/ˈɒfɪs ˌaʊəz/', definition: 'Times when a tutor or professor is available to meet students.', example: 'I asked my tutor during office hours.' },
+      { en: 'attendance', zh: '出席率', category: 'university', phonetic: '/əˈtendəns/', definition: 'The act of being present at classes.', example: 'Good attendance is important for this course.' },
+      { en: 'term', zh: '學期', category: 'university', phonetic: '/tɜːm/', definition: 'A period of study in the academic year.', example: 'The first term starts in autumn.' },
+      { en: 'module handbook', zh: '課程手冊', category: 'university', phonetic: '/ˈmɒdjuːl ˈhændbʊk/', definition: 'A guide with course information, deadlines, and assessment details.', example: 'Read the module handbook before the first class.' },
+      { en: 'seminar paper', zh: '研討課文章', category: 'university', phonetic: '/ˈsemɪnɑː pəˈpeə(r)/', definition: 'A paper prepared for discussion in a seminar.', example: 'We must submit the seminar paper on Friday.' },
+      { en: 'doctor appointment', zh: '看醫生預約', category: 'health', phonetic: '/ˈdɒktə əˈpɔɪntmənt/', definition: 'A scheduled visit to a doctor.', example: 'I made a doctor appointment online.' },
+      { en: 'dentist', zh: '牙醫', category: 'health', phonetic: '/ˈdentɪst/', definition: 'A doctor who treats teeth.', example: 'I need to book a dentist appointment.' },
+      { en: 'pharmacy', zh: '藥局', category: 'health', phonetic: '/ˈfɑːməsi/', definition: 'A place where medicines are sold or dispensed.', example: 'You can buy basic medicine at the pharmacy.' },
+      { en: 'allergy', zh: '過敏', category: 'health', phonetic: '/ˈælədʒi/', definition: 'A reaction to something that does not agree with your body.', example: 'I have a peanut allergy.' },
+      { en: 'emergency contact', zh: '緊急聯絡人', category: 'essentials', phonetic: '/ɪˈmɜːdʒənsi ˈkɒntækt/', definition: 'A person to contact in an emergency.', example: 'Please write your emergency contact on the form.' },
+      { en: 'ID card', zh: '證件', category: 'essentials', phonetic: '/aɪˈdiː kɑːd/', definition: 'An identity card or identification document.', example: 'Always carry your ID card when travelling.' },
+      { en: 'charger', zh: '充電器', category: 'essentials', phonetic: '/ˈtʃɑːdʒə(r)/', definition: 'A device used to charge electronics.', example: 'I forgot my phone charger at home.' },
+      { en: 'adapter', zh: '轉接頭', category: 'essentials', phonetic: '/əˈdæptə(r)/', definition: 'A device used to connect plugs or electronics from different systems.', example: 'You need a UK adapter for your laptop.' },
+      { en: 'planner', zh: '行事曆／規劃工具', category: 'university', phonetic: '/ˈplænə(r)/', definition: 'A notebook or app used to organize tasks and deadlines.', example: 'I use a planner to track assignment deadlines.' }
+    ];
+
+    const categories = [
+      { key: 'all', label: '全部' },
+      { key: 'housing', label: '租屋' },
+      { key: 'transport', label: '交通' },
+      { key: 'shopping', label: '購物' },
+      { key: 'health', label: '健康' },
+      { key: 'university', label: '校園' },
+      { key: 'money', label: '金錢' },
+      { key: 'social', label: '社交' },
+      { key: 'essentials', label: '必備' }
+    ];
+
+    const state = {
+      category: 'all',
+      search: '',
+      sortBy: 'category',
+      favorites: JSON.parse(localStorage.getItem('kcl-favs') || '[]'),
+      quizWord: null,
+      quizAnswer: null,
+      quizLocked: false
+    };
+
+    const els = {
+      wordList: document.getElementById('wordList'),
+      search: document.getElementById('search'),
+      sortBy: document.getElementById('sortBy'),
+      categoryChips: document.getElementById('categoryChips'),
+      quickChips: document.getElementById('quickChips'),
+      totalCount: document.getElementById('totalCount'),
+      favCount: document.getElementById('favCount'),
+      studyCount: document.getElementById('studyCount'),
+      randomBtn: document.getElementById('randomBtn'),
+      clearBtn: document.getElementById('clearBtn'),
+      quizQuestion: document.getElementById('quizQuestion'),
+      quizChoices: document.getElementById('quizChoices'),
+      quizMeta: document.getElementById('quizMeta'),
+      nextQuizBtn: document.getElementById('nextQuizBtn'),
+      speakBtn: document.getElementById('speakBtn')
+    };
+
+    const saveFavs = () => localStorage.setItem('kcl-favs', JSON.stringify(state.favorites));
+    const isFav = (word) => state.favorites.includes(word.en);
+
+    const escapeHtml = (str) => str
+      .replaceAll('&', '&amp;')
+      .replaceAll('<', '&lt;')
+      .replaceAll('>', '&gt;')
+      .replaceAll('"', '&quot;');
+
+    function filteredWords() {
+      let list = words.filter(item => {
+        const matchesCategory = state.category === 'all' || item.category === state.category;
+        const q = state.search.trim().toLowerCase();
+        const matchesQuery = !q || [item.en, item.zh, item.category, item.definition, item.example].some(v => String(v).toLowerCase().includes(q));
+        const matchesFav = state.sortBy !== 'fav' || isFav(item);
+        return matchesCategory && matchesQuery && matchesFav;
+      });
+      if (state.sortBy === 'alpha') {
+        list = [...list].sort((a, b) => a.en.localeCompare(b.en));
+      } else if (state.sortBy === 'category') {
+        list = [...list].sort((a, b) => a.category.localeCompare(b.category) || a.en.localeCompare(b.en));
+      }
+      return list;
+    }
+
+    function renderChips() {
+      els.categoryChips.innerHTML = categories.map(c => `
+        <button class="chip ${state.category === c.key ? 'active' : ''}" data-category="${c.key}">${c.label}</button>
+      `).join('');
+      els.quickChips.innerHTML = ['housing', 'health', 'university', 'money', 'transport'].map(key => {
+        const label = categories.find(c => c.key === key)?.label || key;
+        return `<button class="chip ${state.category === key ? 'active' : ''}" data-category="${key}">${label}</button>`;
+      }).join('');
+    }
+
+    function renderWords() {
+      const list = filteredWords();
+      els.totalCount.textContent = words.length;
+      els.favCount.textContent = state.favorites.length;
+      els.studyCount.textContent = list.length;
+      if (!list.length) {
+        els.wordList.innerHTML = '<div class="empty">沒有找到符合的單字，試試換關鍵字或分類。</div>';
+        return;
+      }
+      els.wordList.innerHTML = list.map(item => {
+        const fav = isFav(item);
+        return `
+          <article class="card">
+            <div class="card-top">
+              <div>
+                <div class="word">${escapeHtml(item.en)}</div>
+                <div class="phonetic">${escapeHtml(item.phonetic)} · ${escapeHtml(item.zh)}</div>
+              </div>
+              <button class="btn small ${fav ? 'favorite' : ''}" data-fav="${escapeHtml(item.en)}">${fav ? '★ 已收藏' : '☆ 收藏'}</button>
+            </div>
+            <div class="tagrow">
+              <span class="tag">${escapeHtml(categories.find(c => c.key === item.category)?.label || item.category)}</span>
+            </div>
+            <div class="def">
+              <div class="row"><div class="label">中文</div><div>${escapeHtml(item.zh)}</div></div>
+              <div class="row"><div class="label">英文解釋</div><div>${escapeHtml(item.definition)}</div></div>
+              <div class="row"><div class="label">例句</div><div class="examples">${escapeHtml(item.example)}</div></div>
+            </div>
+            <div class="actions">
+              <button class="btn small" data-speak="${escapeHtml(item.en)}">朗讀</button>
+              <button class="btn small" data-copy="${escapeHtml(item.en)} · ${escapeHtml(item.zh)}">複製中英</button>
+            </div>
+          </article>
+        `;
+      }).join('');
+    }
+
+    function toggleFav(en) {
+      const idx = state.favorites.indexOf(en);
+      if (idx >= 0) state.favorites.splice(idx, 1);
+      else state.favorites.push(en);
+      saveFavs();
+      renderAll();
+    }
+
+    function chooseRandomWord() {
+      const list = filteredWords();
+      const pool = list.length ? list : words;
+      return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    function renderQuiz(next = false) {
+      const word = chooseRandomWord();
+      const correct = word.zh;
+      const others = [...new Set(words.filter(w => w.zh !== correct).map(w => w.zh))].sort(() => Math.random() - 0.5).slice(0, 3);
+      const options = [correct, ...others].sort(() => Math.random() - 0.5);
+      state.quizWord = word;
+      state.quizAnswer = correct;
+      state.quizLocked = false;
+      els.quizQuestion.textContent = `"${word.en}" 的中文是？`;
+      els.quizChoices.innerHTML = options.map(opt => `<button class="choice" data-choice="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`).join('');
+      els.quizMeta.textContent = `分類：${categories.find(c => c.key === word.category)?.label || word.category} · ${word.phonetic}`;
+    }
+
+    function speak(text) {
+      if (!('speechSynthesis' in window)) return alert('這個裝置不支援朗讀功能');
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = 'en-GB';
+      u.rate = 0.95;
+      window.speechSynthesis.cancel();
+      window.speechSynthesis.speak(u);
+    }
+
+    function renderAll() {
+      renderChips();
+      renderWords();
+      if (!state.quizWord) renderQuiz();
+    }
+
+    document.addEventListener('click', async (e) => {
+      const catBtn = e.target.closest('[data-category]');
+      if (catBtn) {
+        state.category = catBtn.dataset.category;
+        renderAll();
+        return;
+      }
+      const favBtn = e.target.closest('[data-fav]');
+      if (favBtn) return toggleFav(favBtn.dataset.fav);
+      const speakBtn = e.target.closest('[data-speak]');
+      if (speakBtn) return speak(speakBtn.dataset.speak);
+      const copyBtn = e.target.closest('[data-copy]');
+      if (copyBtn) {
+        await navigator.clipboard.writeText(copyBtn.dataset.copy);
+        copyBtn.textContent = '已複製';
+        setTimeout(() => (copyBtn.textContent = '複製中英'), 1200);
+        return;
+      }
+      const choiceBtn = e.target.closest('[data-choice]');
+      if (choiceBtn) {
+        if (state.quizLocked) return;
+        state.quizLocked = true;
+        const answer = choiceBtn.dataset.choice;
+        [...els.quizChoices.querySelectorAll('.choice')].forEach(btn => {
+          if (btn.dataset.choice === state.quizAnswer) btn.classList.add('correct');
+          if (btn.dataset.choice === answer && answer !== state.quizAnswer) btn.classList.add('wrong');
+          btn.disabled = true;
+        });
+        els.quizMeta.textContent = answer === state.quizAnswer ? '答對了，做得好。' : `正確答案：${state.quizAnswer}`;
+      }
+    });
+
+    els.search.addEventListener('input', () => { state.search = els.search.value; renderAll(); });
+    els.sortBy.addEventListener('change', () => { state.sortBy = els.sortBy.value; renderAll(); });
+    els.clearBtn.addEventListener('click', () => { state.search = ''; els.search.value = ''; state.category = 'all'; state.sortBy = 'category'; els.sortBy.value = 'category'; renderAll(); });
+    els.randomBtn.addEventListener('click', () => {
+      const word = chooseRandomWord();
+      state.search = word.en;
+      els.search.value = word.en;
+      renderAll();
+      speak(word.en);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    });
+    els.nextQuizBtn.addEventListener('click', () => renderQuiz(true));
+    els.speakBtn.addEventListener('click', () => state.quizWord && speak(state.quizWord.en));
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(console.error));
+    }
+
+    renderAll();
+  </script>
+</body>
+</html>
