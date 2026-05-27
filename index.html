@@ -1,289 +1,595 @@
 <!doctype html>
-<html lang="zh-Hant">
+<html lang="zh-Hant" data-theme="dark">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#0f172a" />
+  <meta name="theme-color" id="themeColor" content="#0d0c0a" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="KCL Vocabulary" />
   <title>KCL 留學生活單字</title>
   <link rel="manifest" href="manifest.webmanifest" />
   <link rel="icon" href="icon.svg" type="image/svg+xml" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet" />
   <style>
     :root {
       color-scheme: dark;
-      --bg: #07111f;
-      --panel: rgba(15, 23, 42, 0.82);
-      --panel-2: rgba(30, 41, 59, 0.88);
-      --text: #e2e8f0;
-      --muted: #94a3b8;
-      --brand: #38bdf8;
-      --brand-2: #a78bfa;
-      --good: #34d399;
-      --warn: #fbbf24;
-      --bad: #fb7185;
-      --line: rgba(148, 163, 184, 0.18);
-      --shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
-      --radius: 22px;
+      --font-heading: 'Sora', ui-sans-serif, system-ui, sans-serif;
+      --font-body: 'DM Sans', ui-sans-serif, system-ui, sans-serif;
+      --bg: #0d0c0a;
+      --surface: rgba(28, 25, 23, 0.88);
+      --surface-2: rgba(41, 37, 36, 0.92);
+      --text: #f5f5f0;
+      --text-dim: #a8a29e;
+      --accent: #d4876a;
+      --accent-glow: rgba(212, 135, 106, 0.12);
+      --good: #6cd4a0;
+      --warn: #f0c05a;
+      --bad: #e8807a;
+      --border: rgba(168, 162, 158, 0.12);
+      --border-strong: rgba(168, 162, 158, 0.2);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.3);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.4);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.5);
+      --radius-xs: 10px;
+      --radius-sm: 14px;
+      --radius-md: 20px;
+      --radius-lg: 26px;
+      --space-xs: 4px;
+      --space-sm: 8px;
+      --space-md: 14px;
+      --space-lg: 20px;
+      --space-xl: 28px;
+      --transition: 200ms cubic-bezier(0.22, 1, 0.36, 1);
+      --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
     }
-    * { box-sizing: border-box; }
+
+    [data-theme="light"] {
+      color-scheme: light;
+      --bg: #f5f4f0;
+      --surface: rgba(255, 255, 255, 0.85);
+      --surface-2: rgba(245, 244, 240, 0.95);
+      --text: #1c1917;
+      --text-dim: #78716c;
+      --accent: #b86a50;
+      --accent-glow: rgba(184, 106, 80, 0.08);
+      --border: rgba(28, 25, 23, 0.08);
+      --border-strong: rgba(28, 25, 23, 0.14);
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+      --shadow-md: 0 8px 32px rgba(0,0,0,0.08);
+      --shadow-lg: 0 20px 60px rgba(0,0,0,0.06);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; }
+
     body {
       margin: 0;
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-      background:
-        radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 28%),
-        radial-gradient(circle at top right, rgba(167, 139, 250, 0.16), transparent 24%),
-        linear-gradient(180deg, #020617 0%, #08101d 48%, #020617 100%);
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      background: var(--bg);
       color: var(--text);
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
       text-rendering: optimizeLegibility;
+      transition: background var(--transition), color var(--transition);
     }
+
+    .noise {
+      position: fixed;
+      inset: 0;
+      z-index: -1;
+      pointer-events: none;
+      opacity: 0.035;
+    }
+    .noise svg { width: 100%; height: 100%; }
+
+    .skip-link {
+      position: absolute;
+      top: -100%;
+      left: var(--space-md);
+      z-index: 100;
+      padding: var(--space-sm) var(--space-md);
+      background: var(--accent);
+      color: var(--bg);
+      border-radius: var(--radius-xs);
+      font-weight: 600;
+      text-decoration: none;
+    }
+    .skip-link:focus { top: var(--space-md); }
+
     .app {
       max-width: 1200px;
       margin: 0 auto;
-      padding: 20px 16px 32px;
+      padding: var(--space-lg) var(--space-md) var(--space-xl);
+      position: relative;
+      z-index: 1;
     }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(14px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    @keyframes scaleIn {
+      from { opacity: 0; transform: scale(0.96); }
+      to { opacity: 1; transform: scale(1); }
+    }
+    @keyframes shimmer {
+      0% { background-position: -200% 0; }
+      100% { background-position: 200% 0; }
+    }
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-6px); }
+      40% { transform: translateX(6px); }
+      60% { transform: translateX(-4px); }
+      80% { transform: translateX(4px); }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        transition-duration: 0.01ms !important;
+      }
+    }
+
     .topbar {
       display: grid;
-      gap: 14px;
+      gap: var(--space-md);
       grid-template-columns: 1fr;
-      align-items: center;
-      margin-bottom: 16px;
+      margin-bottom: var(--space-lg);
+      animation: fadeUp 0.5s var(--ease-out) both;
     }
+
     .hero {
-      padding: 20px;
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.92), rgba(2, 6, 23, 0.86));
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
+      padding: var(--space-lg);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
     }
+
+    .hero:first-child { animation-delay: 0s; }
+    .hero:last-child { animation-delay: 0.1s; }
+
     .badge {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      color: #bfdbfe;
-      background: rgba(56, 189, 248, 0.12);
-      border: 1px solid rgba(56, 189, 248, 0.22);
+      gap: var(--space-sm);
+      color: var(--accent);
+      background: var(--accent-glow);
+      border: 1px solid var(--border-strong);
       border-radius: 999px;
-      padding: 6px 10px;
+      padding: 5px 11px;
       font-size: 12px;
-      letter-spacing: .02em;
-      margin-bottom: 12px;
+      font-family: var(--font-heading);
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      margin-bottom: var(--space-md);
+      transition: background var(--transition), color var(--transition);
     }
-    h1 { margin: 0 0 8px; font-size: clamp(28px, 4vw, 44px); line-height: 1.05; }
-    .subtitle { margin: 0; color: var(--muted); max-width: 60ch; }
+
+    h1 {
+      font-family: var(--font-heading);
+      margin: 0 0 var(--space-sm);
+      font-size: clamp(28px, 4.5vw, 48px);
+      font-weight: 800;
+      line-height: 1.08;
+      letter-spacing: -0.02em;
+    }
+
+    .subtitle {
+      margin: 0;
+      color: var(--text-dim);
+      max-width: 62ch;
+      font-size: 15px;
+      line-height: 1.7;
+      transition: color var(--transition);
+    }
+
     .stats {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 10px;
-      margin-top: 16px;
+      grid-template-columns: repeat(3, 1fr);
+      gap: var(--space-sm);
+      margin-top: var(--space-lg);
     }
+
     .stat {
-      border: 1px solid var(--line);
-      background: rgba(15, 23, 42, 0.75);
-      border-radius: 18px;
-      padding: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      padding: var(--space-md);
+      transition: background var(--transition), border-color var(--transition);
     }
-    .stat .n { font-size: 22px; font-weight: 800; }
-    .stat .l { font-size: 12px; color: var(--muted); margin-top: 4px; }
+    .stat .n {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .stat .l {
+      font-size: 12px;
+      color: var(--text-dim);
+      margin-top: var(--space-xs);
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+
     .panel {
-      border: 1px solid var(--line);
-      background: var(--panel);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(14px);
+      border: 1px solid var(--border);
+      background: var(--surface);
+      border-radius: var(--radius-md);
+      box-shadow: var(--shadow-md);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: background var(--transition), border-color var(--transition), box-shadow var(--transition);
     }
+
     .toolbar {
       display: grid;
-      gap: 10px;
+      gap: var(--space-sm);
       grid-template-columns: 1fr;
-      padding: 14px;
+      padding: var(--space-md);
+      animation: fadeUp 0.5s var(--ease-out) 0.15s both;
     }
+
     .controls {
       display: flex;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: var(--space-sm);
       align-items: center;
     }
-    input, select, button {
-      font: inherit;
+
+    input, select, button, textarea {
+      font-family: var(--font-body);
+      font-size: 15px;
     }
+
     input[type="search"], select {
       width: 100%;
       color: var(--text);
-      background: rgba(2, 6, 23, 0.72);
-      border: 1px solid var(--line);
-      border-radius: 14px;
-      padding: 14px 14px;
+      background: var(--surface-2);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: 14px 16px;
       outline: none;
+      -webkit-appearance: none;
+      appearance: none;
+      transition: border-color var(--transition), background var(--transition), box-shadow var(--transition);
     }
-    input[type="search"]:focus, select:focus, button:focus-visible {
-      border-color: rgba(56, 189, 248, 0.75);
-      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.12);
+    input[type="search"]::placeholder { color: var(--text-dim); }
+    input[type="search"]:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 4px var(--accent-glow);
     }
-    .btn {
-      border: 1px solid var(--line);
-      background: rgba(15, 23, 42, 0.78);
+
+    button {
+      font-family: var(--font-body);
+      border: 1.5px solid var(--border);
+      background: var(--surface-2);
       color: var(--text);
-      padding: 12px 14px;
-      border-radius: 14px;
+      padding: 12px 18px;
+      border-radius: var(--radius-sm);
       cursor: pointer;
-      transition: transform .12s ease, background .12s ease, border-color .12s ease;
+      transition: transform var(--transition), background var(--transition), border-color var(--transition), box-shadow var(--transition);
+      font-weight: 500;
+      min-height: 44px;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
     }
-    .btn:hover { transform: translateY(-1px); }
-    .btn.primary {
-      background: linear-gradient(135deg, rgba(56, 189, 248, 0.95), rgba(167, 139, 250, 0.92));
-      color: #020617;
-      border-color: transparent;
-      font-weight: 700;
+    button:hover { border-color: var(--border-strong); }
+    button:active { transform: scale(0.97); }
+    button:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
     }
+
+    button.primary {
+      background: var(--accent);
+      color: var(--bg);
+      border-color: var(--accent);
+      font-weight: 600;
+    }
+    button.primary:hover {
+      filter: brightness(1.08);
+      border-color: var(--accent);
+    }
+
+    .theme-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      padding: 0;
+      font-size: 18px;
+      line-height: 1;
+      border-radius: var(--radius-xs);
+      flex-shrink: 0;
+    }
+
     .chips {
       display: flex;
       flex-wrap: wrap;
-      gap: 8px;
+      gap: var(--space-sm);
     }
+
     .chip {
-      padding: 10px 12px;
+      padding: 10px 16px;
       border-radius: 999px;
-      border: 1px solid var(--line);
-      background: rgba(15, 23, 42, 0.7);
-      color: var(--muted);
+      border: 1.5px solid var(--border);
+      background: transparent;
+      color: var(--text-dim);
       cursor: pointer;
       font-size: 14px;
+      font-weight: 500;
+      min-height: 42px;
+      transition: all var(--transition);
+    }
+    .chip:hover {
+      border-color: var(--border-strong);
+      color: var(--text);
     }
     .chip.active {
-      color: #e0f2fe;
-      background: rgba(56, 189, 248, 0.16);
-      border-color: rgba(56, 189, 248, 0.3);
+      color: var(--accent);
+      background: var(--accent-glow);
+      border-color: var(--accent);
     }
+    .chip:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
     .main {
-      margin-top: 14px;
+      margin-top: var(--space-md);
       display: grid;
-      gap: 14px;
+      gap: var(--space-md);
       grid-template-columns: 1fr;
     }
+
     .list {
       display: grid;
-      gap: 12px;
-      padding: 14px;
+      gap: var(--space-md);
+      padding: var(--space-md);
     }
+
     .card {
-      border: 1px solid var(--line);
-      background: linear-gradient(180deg, rgba(15, 23, 42, 0.84), rgba(2, 6, 23, 0.8));
-      border-radius: 18px;
-      padding: 14px;
+      border: 1px solid var(--border);
+      background: var(--surface-2);
+      border-radius: var(--radius-sm);
+      padding: var(--space-md) var(--space-md) var(--space-lg);
+      box-shadow: var(--shadow-sm);
+      transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition), background var(--transition);
     }
+    .card:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--border-strong);
+    }
+
     .card-top {
       display: flex;
       justify-content: space-between;
-      gap: 12px;
+      gap: var(--space-md);
       align-items: flex-start;
     }
-    .word { font-size: 22px; font-weight: 800; }
-    .phonetic { color: var(--muted); font-size: 14px; margin-top: 4px; }
-    .tagrow { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+
+    .word {
+      font-family: var(--font-heading);
+      font-size: 24px;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+    }
+    .phonetic {
+      color: var(--text-dim);
+      font-size: 14px;
+      margin-top: var(--space-xs);
+      transition: color var(--transition);
+    }
+
+    .tagrow {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-sm);
+      margin-top: var(--space-sm);
+    }
     .tag {
       font-size: 12px;
-      padding: 5px 8px;
+      padding: 5px 10px;
       border-radius: 999px;
-      background: rgba(148, 163, 184, 0.09);
-      color: #cbd5e1;
-      border: 1px solid rgba(148, 163, 184, 0.14);
+      background: var(--accent-glow);
+      color: var(--accent);
+      border: 1px solid var(--border-strong);
+      font-weight: 500;
     }
+
     .def {
-      margin-top: 12px;
+      margin-top: var(--space-md);
       display: grid;
-      gap: 10px;
+      gap: var(--space-sm);
       color: var(--text);
     }
-    .row {
-      display: grid;
-      gap: 4px;
+    .row { display: grid; gap: var(--space-xs); }
+    .label {
+      color: var(--text-dim);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      font-weight: 600;
+      transition: color var(--transition);
     }
-    .label { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .08em; }
     .examples {
-      color: #cbd5e1;
-      font-size: 14px;
-      line-height: 1.55;
+      color: var(--text);
+      font-size: 14.5px;
+      line-height: 1.6;
     }
-    .actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
-    .small { padding: 10px 12px; border-radius: 12px; }
-    .favorite { color: #fde68a; }
+    .actions { display: flex; gap: var(--space-sm); flex-wrap: wrap; margin-top: var(--space-lg); }
+    .small { padding: 10px 14px; border-radius: var(--radius-xs); font-size: 14px; }
+    .favorite { color: var(--warn) !important; border-color: rgba(240, 192, 90, 0.3) !important; background: rgba(240, 192, 90, 0.1) !important; }
     .empty {
-      padding: 24px;
-      color: var(--muted);
+      padding: var(--space-xl);
+      color: var(--text-dim);
       text-align: center;
+      font-size: 15px;
+      transition: color var(--transition);
     }
+
     .quiz {
-      padding: 14px;
+      padding: var(--space-md);
       display: grid;
-      gap: 12px;
+      gap: var(--space-md);
+      align-content: start;
     }
     .quizbox {
-      border: 1px solid var(--line);
-      border-radius: 18px;
-      padding: 14px;
-      background: rgba(2, 6, 23, 0.7);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      padding: var(--space-md) var(--space-md) var(--space-lg);
+      background: var(--surface-2);
+      transition: background var(--transition), border-color var(--transition);
     }
-    .quizq { font-size: 18px; font-weight: 700; margin: 0 0 10px; }
-    .quizchoices { display: grid; gap: 8px; }
+    .quizq {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      margin: 0 0 var(--space-md);
+      line-height: 1.4;
+    }
+    .quizscore {
+      font-size: 13px;
+      color: var(--text-dim);
+      margin-bottom: var(--space-sm);
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+    .quizscore .num { color: var(--accent); }
+    .quizchoices { display: grid; gap: var(--space-sm); }
     .choice {
-      padding: 12px 14px;
-      border-radius: 14px;
-      border: 1px solid var(--line);
-      background: rgba(15, 23, 42, 0.75);
+      padding: 14px 16px;
+      border-radius: var(--radius-xs);
+      border: 1.5px solid var(--border);
+      background: var(--surface);
       color: var(--text);
       text-align: left;
       cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      min-height: 48px;
+      transition: all var(--transition);
     }
-    .choice.correct { border-color: rgba(52, 211, 153, 0.5); background: rgba(16, 185, 129, 0.15); }
-    .choice.wrong { border-color: rgba(251, 113, 133, 0.55); background: rgba(251, 113, 133, 0.12); }
-    .quizmeta { color: var(--muted); font-size: 14px; }
-    .footer { color: var(--muted); font-size: 13px; padding: 6px 2px 0; }
+    .choice:hover {
+      border-color: var(--border-strong);
+      background: var(--surface-2);
+    }
+    .choice.correct {
+      border-color: var(--good) !important;
+      background: rgba(108, 212, 160, 0.1) !important;
+      color: var(--good);
+    }
+    .choice.wrong {
+      border-color: var(--bad) !important;
+      background: rgba(232, 128, 122, 0.1) !important;
+      color: var(--bad);
+      animation: shake 0.4s ease;
+    }
+    .choice:disabled { cursor: default; opacity: 0.85; }
+    .quizmeta { color: var(--text-dim); font-size: 14px; margin-top: var(--space-sm); transition: color var(--transition); }
+
+    .footer {
+      color: var(--text-dim);
+      font-size: 13px;
+      padding: var(--space-xs) 2px 0;
+      transition: color var(--transition);
+    }
+
+    .card, .quizbox, .stat { animation: fadeUp 0.4s var(--ease-out) both; }
+    .list .card:nth-child(1) { animation-delay: 0.02s; }
+    .list .card:nth-child(2) { animation-delay: 0.04s; }
+    .list .card:nth-child(3) { animation-delay: 0.06s; }
+    .list .card:nth-child(4) { animation-delay: 0.08s; }
+    .list .card:nth-child(5) { animation-delay: 0.1s; }
+    .list .card:nth-child(6) { animation-delay: 0.12s; }
+    .list .card:nth-child(7) { animation-delay: 0.14s; }
+    .list .card:nth-child(8) { animation-delay: 0.16s; }
+    .list .card:nth-child(9) { animation-delay: 0.18s; }
+    .list .card:nth-child(10) { animation-delay: 0.2s; }
+
+    @media (min-width: 640px) {
+      .app { padding: var(--space-xl) var(--space-lg); }
+      .controls { flex-wrap: nowrap; }
+    }
     @media (min-width: 900px) {
-      .topbar { grid-template-columns: 1.2fr .8fr; }
-      .toolbar { grid-template-columns: 1.4fr .9fr; align-items: center; }
-      .main { grid-template-columns: 1.2fr .8fr; align-items: start; }
-      .quiz { position: sticky; top: 16px; }
+      .topbar { grid-template-columns: 1.3fr 0.7fr; }
+      .toolbar { grid-template-columns: 1.4fr 0.6fr; align-items: center; }
+      .main { grid-template-columns: 1.2fr 0.8fr; align-items: start; }
+      .quiz { position: sticky; top: var(--space-lg); }
+      .controls { flex-wrap: wrap; }
+    }
+    @media (min-width: 1200px) {
+      .topbar { grid-template-columns: 1.4fr 0.6fr; }
+      .main { grid-template-columns: 1.3fr 0.7fr; }
     }
   </style>
 </head>
 <body>
+  <a href="#main-content" class="skip-link">跳到主要內容</a>
+
+  <div class="noise">
+    <svg xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+      <filter id="noiseFilter">
+        <feTurbulence type="fractalNoise" baseFrequency="0.65" numOctaves="3" stitchTiles="stitch" />
+        <feColorMatrix type="saturate" values="0" />
+      </filter>
+      <rect width="100%" height="100%" filter="url(#noiseFilter)" />
+    </svg>
+  </div>
+
   <div class="app">
     <section class="topbar">
       <div class="hero">
-        <div class="badge">KCL 留學生活單字 · 中英文雙語 · PWA</div>
-        <h1>留學常用單字，手機打開就能背</h1>
-        <p class="subtitle">適合你在英國生活、租屋、銀行、醫療、校園、交通、社交場景使用。可搜尋、分類、收藏、測驗，離線也能看。</p>
+        <div class="badge">KCL 留學生活單字 · 中英雙語 · PWA</div>
+        <h1>留學常用單字，<br>手機打開就能背</h1>
+        <p class="subtitle">專為英國留學生設計 — 租屋、銀行、醫療、校園、交通、社交場景必備。可搜尋、分類、收藏、測驗，離線也能用。</p>
         <div class="stats">
           <div class="stat"><div class="n" id="totalCount">0</div><div class="l">總單字數</div></div>
           <div class="stat"><div class="n" id="favCount">0</div><div class="l">已收藏</div></div>
-          <div class="stat"><div class="n" id="studyCount">0</div><div class="l">目前篩選</div></div>
+          <div class="stat"><div class="n" id="studyCount">0</div><div class="l">篩選結果</div></div>
         </div>
       </div>
       <div class="hero">
-        <div class="badge">快速使用</div>
+        <div class="badge">快速分類</div>
         <div class="chips" id="quickChips"></div>
-        <div class="footer" style="margin-top:12px;">安裝到手機後會像 app 一樣出現在主畫面。請先透過本機或網頁伺服器開啟。</div>
+        <div class="footer" style="margin-top:var(--space-md);">安裝到手機後會像 app 一樣出現在主畫面。</div>
       </div>
     </section>
 
     <section class="panel toolbar">
-      <input id="search" type="search" placeholder="搜尋英文或中文，例如 rent, bank, 醫院" autocomplete="off" />
+      <div style="display:flex;gap:var(--space-sm);align-items:center;flex-wrap:wrap;width:100%;">
+        <input id="search" type="search" placeholder="搜尋英文或中文…" autocomplete="off" style="flex:1;min-width:200px;" />
+        <button class="theme-btn" id="themeToggle" aria-label="切換深淺色模式">🌙</button>
+      </div>
       <div class="controls">
-        <select id="sortBy" aria-label="排序方式">
+        <select id="sortBy" aria-label="排序方式" style="min-width:130px;">
           <option value="category">按分類</option>
-          <option value="alpha">英文 A-Z</option>
+          <option value="alpha">英文 A–Z</option>
           <option value="fav">只看收藏</option>
         </select>
-        <button class="btn primary" id="randomBtn">隨機抽一個</button>
+        <button class="btn primary" id="randomBtn">🎲 隨機抽一個</button>
         <button class="btn" id="clearBtn">清除搜尋</button>
       </div>
     </section>
 
-    <section class="main">
+    <section class="main" id="main-content" tabindex="-1">
       <div class="panel">
         <div class="list">
           <div class="chips" id="categoryChips"></div>
@@ -293,15 +599,16 @@
       <div class="panel quiz">
         <div class="badge">小測驗</div>
         <div class="quizbox">
+          <div class="quizscore" id="quizScore">✅ 答對 <span class="num">0</span> / <span id="quizTotal">0</span></div>
           <p class="quizq" id="quizQuestion">準備中</p>
           <div class="quizchoices" id="quizChoices"></div>
           <div class="quizmeta" id="quizMeta"></div>
         </div>
         <div class="actions">
           <button class="btn primary small" id="nextQuizBtn">下一題</button>
-          <button class="btn small" id="speakBtn">朗讀目前題目</button>
+          <button class="btn small" id="speakBtn">🔊 朗讀題目</button>
         </div>
-        <div class="footer">提示：收藏常用字，之後可用收藏清單快速複習。</div>
+        <div class="footer">收藏常用字，日後可用收藏清單快速複習。</div>
       </div>
     </section>
   </div>
@@ -353,14 +660,14 @@
       { en: 'direct debit', zh: '直接扣款', category: 'money', phonetic: '/dəˌrekt ˈdebɪt/', definition: 'An automatic payment taken from your bank account.', example: 'My phone bill is paid by direct debit.' },
       { en: 'overdraft', zh: '透支', category: 'money', phonetic: '/ˈəʊvədrɑːft/', definition: 'Spending more money than you have in your account.', example: 'Avoid going into your overdraft if possible.' },
       { en: 'tuition fee', zh: '學費', category: 'money', phonetic: '/tjuːˈɪʃn fiː/', definition: 'The cost of studying at a university.', example: 'International tuition fees can be high.' },
-      { en: 'scholarship', zh: '獎學金', category: 'money', phonetic: '/ˈskɒləʃɪp/', definition: 'Money given to support a student’s studies.', example: 'She received a scholarship for academic excellence.' },
+      { en: 'scholarship', zh: '獎學金', category: 'money', phonetic: '/ˈskɒləʃɪp/', definition: 'Money given to support a student\'s studies.', example: 'She received a scholarship for academic excellence.' },
       { en: 'student loan', zh: '學生貸款', category: 'money', phonetic: '/ˈstjuːdənt ləʊn/', definition: 'Borrowed money used to pay for education.', example: 'Some students use a loan to cover living costs.' },
       { en: 'lecture', zh: '講課／演講課', category: 'university', phonetic: '/ˈlektʃə(r)/', definition: 'A formal class taught to many students.', example: 'The lecture covered financial accounting basics.' },
       { en: 'tutorial', zh: '小班討論課', category: 'university', phonetic: '/tjuːˈtɔːriəl/', definition: 'A small group teaching session.', example: 'We discussed the case study in the tutorial.' },
       { en: 'essay', zh: '論文／短文', category: 'university', phonetic: '/ˈeseɪ/', definition: 'A structured piece of academic writing.', example: 'I need to finish my essay by next week.' },
       { en: 'dissertation', zh: '論文', category: 'university', phonetic: '/ˌdɪsəˈteɪʃn/', definition: 'A long academic research paper.', example: 'The dissertation topic is related to auditing.' },
       { en: 'citation', zh: '引用', category: 'university', phonetic: '/saɪˈteɪʃn/', definition: 'A reference to a source used in your work.', example: 'Make sure every source has a proper citation.' },
-      { en: 'plagiarism', zh: '抄襲', category: 'university', phonetic: '/ˈpleɪdʒərɪzəm/', definition: 'Using someone else’s work or words without credit.', example: 'Plagiarism can lead to serious academic penalties.' },
+      { en: 'plagiarism', zh: '抄襲', category: 'university', phonetic: '/ˈpleɪdʒərɪzəm/', definition: 'Using someone else\'s work or words without credit.', example: 'Plagiarism can lead to serious academic penalties.' },
       { en: 'deadline extension', zh: '延長截止日期', category: 'university', phonetic: '/ˈdedlaɪn ɪkˈstenʃn/', definition: 'Extra time granted to submit work later.', example: 'I requested a deadline extension because I was ill.' },
       { en: 'office hours', zh: '導師答疑時間', category: 'university', phonetic: '/ˈɒfɪs ˌaʊəz/', definition: 'Times when a tutor or professor is available to meet students.', example: 'I asked my tutor during office hours.' },
       { en: 'attendance', zh: '出席率', category: 'university', phonetic: '/əˈtendəns/', definition: 'The act of being present at classes.', example: 'Good attendance is important for this course.' },
@@ -397,7 +704,10 @@
       favorites: JSON.parse(localStorage.getItem('kcl-favs') || '[]'),
       quizWord: null,
       quizAnswer: null,
-      quizLocked: false
+      quizLocked: false,
+      theme: localStorage.getItem('kcl-theme') || 'dark',
+      quizCorrect: 0,
+      quizTotal: 0
     };
 
     const els = {
@@ -414,8 +724,12 @@
       quizQuestion: document.getElementById('quizQuestion'),
       quizChoices: document.getElementById('quizChoices'),
       quizMeta: document.getElementById('quizMeta'),
+      quizScore: document.getElementById('quizScore'),
+      quizTotal: document.getElementById('quizTotal'),
       nextQuizBtn: document.getElementById('nextQuizBtn'),
-      speakBtn: document.getElementById('speakBtn')
+      speakBtn: document.getElementById('speakBtn'),
+      themeToggle: document.getElementById('themeToggle'),
+      themeColor: document.getElementById('themeColor')
     };
 
     const saveFavs = () => localStorage.setItem('kcl-favs', JSON.stringify(state.favorites));
@@ -426,6 +740,18 @@
       .replaceAll('<', '&lt;')
       .replaceAll('>', '&gt;')
       .replaceAll('"', '&quot;');
+
+    function applyTheme() {
+      document.documentElement.setAttribute('data-theme', state.theme);
+      els.themeToggle.textContent = state.theme === 'dark' ? '🌙' : '☀️';
+      els.themeColor.content = state.theme === 'dark' ? '#0d0c0a' : '#f5f4f0';
+      localStorage.setItem('kcl-theme', state.theme);
+    }
+
+    function toggleTheme() {
+      state.theme = state.theme === 'dark' ? 'light' : 'dark';
+      applyTheme();
+    }
 
     function filteredWords() {
       let list = words.filter(item => {
@@ -471,7 +797,7 @@
                 <div class="word">${escapeHtml(item.en)}</div>
                 <div class="phonetic">${escapeHtml(item.phonetic)} · ${escapeHtml(item.zh)}</div>
               </div>
-              <button class="btn small ${fav ? 'favorite' : ''}" data-fav="${escapeHtml(item.en)}">${fav ? '★ 已收藏' : '☆ 收藏'}</button>
+              <button class="btn small ${fav ? 'favorite' : ''}" data-fav="${escapeHtml(item.en)}">${fav ? '★' : '☆'}</button>
             </div>
             <div class="tagrow">
               <span class="tag">${escapeHtml(categories.find(c => c.key === item.category)?.label || item.category)}</span>
@@ -482,8 +808,8 @@
               <div class="row"><div class="label">例句</div><div class="examples">${escapeHtml(item.example)}</div></div>
             </div>
             <div class="actions">
-              <button class="btn small" data-speak="${escapeHtml(item.en)}">朗讀</button>
-              <button class="btn small" data-copy="${escapeHtml(item.en)} · ${escapeHtml(item.zh)}">複製中英</button>
+              <button class="btn small" data-speak="${escapeHtml(item.en)}">🔊 朗讀</button>
+              <button class="btn small" data-copy="${escapeHtml(item.en)} · ${escapeHtml(item.zh)}">📋 複製中英</button>
             </div>
           </article>
         `;
@@ -504,7 +830,7 @@
       return pool[Math.floor(Math.random() * pool.length)];
     }
 
-    function renderQuiz(next = false) {
+    function renderQuiz() {
       const word = chooseRandomWord();
       const correct = word.zh;
       const others = [...new Set(words.filter(w => w.zh !== correct).map(w => w.zh))].sort(() => Math.random() - 0.5).slice(0, 3);
@@ -512,17 +838,18 @@
       state.quizWord = word;
       state.quizAnswer = correct;
       state.quizLocked = false;
-      els.quizQuestion.textContent = `"${word.en}" 的中文是？`;
+      els.quizQuestion.textContent = `「${word.en}」的中文是？`;
       els.quizChoices.innerHTML = options.map(opt => `<button class="choice" data-choice="${escapeHtml(opt)}">${escapeHtml(opt)}</button>`).join('');
       els.quizMeta.textContent = `分類：${categories.find(c => c.key === word.category)?.label || word.category} · ${word.phonetic}`;
+      els.quizTotal.textContent = state.quizTotal;
     }
 
     function speak(text) {
-      if (!('speechSynthesis' in window)) return alert('這個裝置不支援朗讀功能');
+      if (!('speechSynthesis' in window)) return;
+      window.speechSynthesis.cancel();
       const u = new SpeechSynthesisUtterance(text);
       u.lang = 'en-GB';
-      u.rate = 0.95;
-      window.speechSynthesis.cancel();
+      u.rate = 0.92;
       window.speechSynthesis.speak(u);
     }
 
@@ -546,27 +873,32 @@
       const copyBtn = e.target.closest('[data-copy]');
       if (copyBtn) {
         await navigator.clipboard.writeText(copyBtn.dataset.copy);
-        copyBtn.textContent = '已複製';
-        setTimeout(() => (copyBtn.textContent = '複製中英'), 1200);
+        copyBtn.textContent = '✓ 已複製';
+        setTimeout(() => (copyBtn.textContent = '📋 複製中英'), 1200);
         return;
       }
       const choiceBtn = e.target.closest('[data-choice]');
       if (choiceBtn) {
         if (state.quizLocked) return;
         state.quizLocked = true;
+        state.quizTotal++;
         const answer = choiceBtn.dataset.choice;
         [...els.quizChoices.querySelectorAll('.choice')].forEach(btn => {
           if (btn.dataset.choice === state.quizAnswer) btn.classList.add('correct');
           if (btn.dataset.choice === answer && answer !== state.quizAnswer) btn.classList.add('wrong');
           btn.disabled = true;
         });
-        els.quizMeta.textContent = answer === state.quizAnswer ? '答對了，做得好。' : `正確答案：${state.quizAnswer}`;
+        if (answer === state.quizAnswer) state.quizCorrect++;
+        els.quizMeta.textContent = answer === state.quizAnswer ? '✓ 答對了，做得好。' : `✗ 正確答案：${state.quizAnswer}`;
+        els.quizScore.innerHTML = `✅ 答對 <span class="num">${state.quizCorrect}</span> / <span>${state.quizTotal}</span>`;
       }
     });
 
     els.search.addEventListener('input', () => { state.search = els.search.value; renderAll(); });
     els.sortBy.addEventListener('change', () => { state.sortBy = els.sortBy.value; renderAll(); });
-    els.clearBtn.addEventListener('click', () => { state.search = ''; els.search.value = ''; state.category = 'all'; state.sortBy = 'category'; els.sortBy.value = 'category'; renderAll(); });
+    els.clearBtn.addEventListener('click', () => {
+      state.search = ''; els.search.value = ''; state.category = 'all'; state.sortBy = 'category'; els.sortBy.value = 'category'; renderAll();
+    });
     els.randomBtn.addEventListener('click', () => {
       const word = chooseRandomWord();
       state.search = word.en;
@@ -577,9 +909,12 @@
     });
     els.nextQuizBtn.addEventListener('click', () => renderQuiz(true));
     els.speakBtn.addEventListener('click', () => state.quizWord && speak(state.quizWord.en));
+    els.themeToggle.addEventListener('click', toggleTheme);
+
+    applyTheme();
 
     if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(console.error));
+      window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
     }
 
     renderAll();

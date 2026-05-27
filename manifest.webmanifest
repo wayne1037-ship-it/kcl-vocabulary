@@ -1,12 +1,12 @@
 {
   "name": "KCL 留學生活單字",
-  "short_name": "KCL Vocabulary",
-  "description": "留學生活常用中英文單字、收藏、搜尋與測驗 PWA。",
+  "short_name": "KCL 單字",
+  "description": "留學生活常用中英文單字 — 收藏、搜尋、測驗，離線可用。",
   "start_url": ".",
   "scope": ".",
   "display": "standalone",
-  "background_color": "#020617",
-  "theme_color": "#0f172a",
+  "background_color": "#0d0c0a",
+  "theme_color": "#0d0c0a",
   "lang": "zh-Hant",
   "icons": [
     {
